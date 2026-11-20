@@ -18,6 +18,7 @@ def start_video(driver: webdriver.Remote, settings: Settings) -> bool:
     except Exception:
         LOGGER.warning("Screen recording is unavailable", exc_info=True)
         return False
+    LOGGER.info("Screen recording started")
     return True
 
 
@@ -28,7 +29,11 @@ def stop_video(driver: webdriver.Remote) -> bytes | None:
     except Exception:
         LOGGER.warning("Could not stop screen recording", exc_info=True)
         return None
-    return base64.b64decode(encoded) if encoded else None
+    if not encoded:
+        LOGGER.warning("Screen recording returned no data")
+        return None
+    LOGGER.info("Screen recording captured (%d base64 characters)", len(encoded))
+    return base64.b64decode(encoded)
 
 
 def attach_screenshot(driver: webdriver.Remote, name: str) -> None:
@@ -46,3 +51,4 @@ def attach_screenshot(driver: webdriver.Remote, name: str) -> None:
 def attach_video(video: bytes, name: str) -> None:
     """Attach a recorded video to the Allure report."""
     allure.attach(video, name=name, attachment_type=allure.attachment_type.MP4)
+    LOGGER.info("Video attached to Allure (%d bytes)", len(video))
