@@ -2,7 +2,7 @@
 
 > Cross-platform mobile test automation framework (Android + iOS) built with **Python**, **Appium 2+**, **Pytest** and **Allure**, targeting the **Sauce Labs My Demo App**.
 
-[![CI](https://github.com/YOUR_GITHUB_USERNAME/appium-mobile-framework/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_GITHUB_USERNAME/appium-mobile-framework/actions)
+[![CI](https://github.com/Rachdi-imen/appium-mobile-framework/actions/workflows/ci.yml/badge.svg)](https://github.com/Rachdi-imen/appium-mobile-framework/actions)
 ![Python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![Appium](https://img.shields.io/badge/Appium-2.x%2F3.x-purple)
 ![Pytest](https://img.shields.io/badge/pytest-8.x-green)
