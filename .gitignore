@@ -1,0 +1,26 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Tools
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets and local config
+.env
+
+# Test output
+reports/
+
+# App binaries
+apps/*.apk
+apps/*.ipa
+apps/*.zip
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+allure-report/
