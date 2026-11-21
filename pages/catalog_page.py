@@ -1,4 +1,4 @@
-"""Catalog screen: product list, sorting, cart and menu entry points."""
+"""Catalog screen: product list and product search by name."""
 
 from appium.webdriver.common.appiumby import AppiumBy
 
@@ -19,8 +19,6 @@ PRODUCT_TITLES = Locator(
     ios=(AppiumBy.ACCESSIBILITY_ID, "Product Title"),
     description="Product titles",
 )
-CART_BUTTON = Locator.shared(AppiumBy.ACCESSIBILITY_ID, "View cart", "Cart button")
-MENU_BUTTON = Locator.shared(AppiumBy.ACCESSIBILITY_ID, "View menu", "Menu button")
 
 
 def product_image(name: str) -> Locator:
@@ -55,9 +53,3 @@ class CatalogPage(BasePage):
                 return
             scroll_down(self.driver)
         raise LookupError(f"Product not found after {max_swipes} swipes: {name!r}")
-
-    def open_cart(self) -> None:
-        self.click(CART_BUTTON)
-
-    def open_menu(self) -> None:
-        self.click(MENU_BUTTON)

@@ -3,16 +3,29 @@
 import logging
 
 from appium import webdriver
+from appium.webdriver.common.appiumby import AppiumBy
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
-from core.gestures import scroll_down
 
 from config.settings import Settings, get_settings
+from core.gestures import scroll_down
 from core.locator import Locator, LocatorTuple
 
 LOGGER = logging.getLogger(__name__)
+
+APP_ID = "com.saucelabs.mydemoapp.android:id"
+
+# the header is on every screen, so these locators live in the base page
+CART_BUTTON = Locator.shared(AppiumBy.ACCESSIBILITY_ID, "View cart", "Cart button")
+MENU_BUTTON = Locator.shared(AppiumBy.ACCESSIBILITY_ID, "View menu", "Menu button")
+# TODO(ios): the iOS value is temporary, I need an iOS UI dump to get the real one.
+CART_BADGE = Locator(
+    android=(AppiumBy.ID, f"{APP_ID}/cartTV"),
+    ios=(AppiumBy.ACCESSIBILITY_ID, "TODO-ios-cart-badge"),
+    description="Cart badge",
+)
 
 
 class BasePage:
@@ -68,7 +81,6 @@ class BasePage:
             return False
         return True
 
-
     def scroll_to(self, locator: Locator, max_swipes: int = 8) -> None:
         """Scroll down until the element is visible, or fail with a clear message."""
         for _ in range(max_swipes):
@@ -81,7 +93,6 @@ class BasePage:
                 f"Not found after {max_swipes} swipes: {self._label(locator, resolved)}"
             )
 
-        
     # --- Actions ---------------------------------------------------------
     def click(self, locator: Locator, timeout: float | None = None) -> None:
         resolved = self._resolve(locator)
@@ -101,3 +112,17 @@ class BasePage:
 
     def text_of(self, locator: Locator) -> str:
         return self.find(locator).text
+
+    # --- Header (visible on every screen) --------------------------------
+    def open_cart(self) -> None:
+        self.click(CART_BUTTON)
+
+    def open_menu(self) -> None:
+        self.click(MENU_BUTTON)
+
+    def cart_count(self) -> int:
+        """Number shown on the cart badge (0 when there is no badge)."""
+        # the badge only exists when the cart has items
+        if not self.is_displayed(CART_BADGE, timeout=5):
+            return 0
+        return int(self.text_of(CART_BADGE))
