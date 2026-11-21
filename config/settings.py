@@ -4,7 +4,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Self
 
-from pydantic  import SecretStr, model_validator
+from pydantic import SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from core.enums import ExecutionMode, Platform
@@ -101,8 +101,7 @@ class Settings(BaseSettings):
                 return "https://hub-cloud.browserstack.com/wd/hub"
             case ExecutionMode.SAUCELABS:
                 return (
-                    f"https://ondemand.{self.saucelabs_region}"
-                    ".saucelabs.com:443/wd/hub"
+                    f"https://ondemand.{self.saucelabs_region}.saucelabs.com:443/wd/hub"
                 )
             case _:
                 return self.appium_server_url

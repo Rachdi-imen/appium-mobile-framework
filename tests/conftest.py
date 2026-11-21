@@ -13,8 +13,12 @@ from core.artifacts import (
     stop_video,
 )
 from core.driver_factory import create_driver
+from pages.cart_page import CartPage
+from pages.catalog_page import CatalogPage
+from pages.login_page import LoginPage
+from pages.product_page import ProductPage
 
-# Keeps the result of each test phase (setup / call / teardown) on the test item.
+# Save the result of each test step to know whether the test failed, so we can take a screenshot and video on failure.
 PHASE_REPORTS: pytest.StashKey[dict[str, pytest.TestReport]] = pytest.StashKey()
 
 
@@ -57,5 +61,22 @@ def driver(
         session.quit()
 
 
+@pytest.fixture
+def login_page(driver: webdriver.Remote) -> LoginPage:
+    """Open the login screen with one product in the cart."""
+    catalog = CatalogPage(driver)
+    assert catalog.is_loaded()
+    catalog.open_product("Sauce Labs Backpack")
 
-        
+    product = ProductPage(driver)
+    assert product.is_loaded()
+    product.add_to_cart()
+    product.open_cart()
+
+    cart = CartPage(driver)
+    assert cart.is_loaded()
+    cart.proceed_to_checkout()
+
+    login = LoginPage(driver)
+    assert login.is_loaded()
+    return login

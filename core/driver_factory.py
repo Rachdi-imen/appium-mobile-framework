@@ -29,25 +29,30 @@ def create_driver(
         _apply_cloud_capabilities(options, cfg, session_name)
 
     LOGGER.info(
-        "Starting %s session (%s) on %s", cfg.platform, cfg.execution_mode, cfg.remote_url
+        "Starting %s session (%s) on %s",
+        cfg.platform,
+        cfg.execution_mode,
+        cfg.remote_url,
     )
     driver = webdriver.Remote(command_executor=cfg.remote_url, options=options)
-    driver.implicitly_wait(0)  # explicit waits only, never mixed with implicit ones
+    driver.implicitly_wait(0)
     return driver
+
+
 def _build_android_options(cfg: Settings) -> UiAutomator2Options:
     options = UiAutomator2Options()
     options.platform_name = "Android"
     options.device_name = cfg.android_device_name
     options.new_command_timeout = cfg.new_command_timeout
     options.auto_grant_permissions = True
-    # The app opens on a splash screen that forwards to another activity:
     # accept any activity instead of waiting for the splash one.
-    options.app_wait_activity = "*"          # <-- nouvelle ligne
+    options.app_wait_activity = "*"
     if cfg.android_platform_version:
         options.platform_version = cfg.android_platform_version
     if not cfg.is_cloud:
         options.app = str(cfg.local_app_path)
     return options
+
 
 def _build_options(cfg: Settings) -> DriverOptions:
     match cfg.platform:
@@ -55,7 +60,6 @@ def _build_options(cfg: Settings) -> DriverOptions:
             return _build_android_options(cfg)
         case Platform.IOS:
             return _build_ios_options(cfg)
-
 
 
 def _build_ios_options(cfg: Settings) -> XCUITestOptions:

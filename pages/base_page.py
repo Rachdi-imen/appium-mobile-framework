@@ -61,7 +61,9 @@ class BasePage:
                 f"Element not visible: {self._label(locator, resolved)}"
             ) from exc
 
-    def find_all(self, locator: Locator, timeout: float | None = None) -> list[WebElement]:
+    def find_all(
+        self, locator: Locator, timeout: float | None = None
+    ) -> list[WebElement]:
         """Wait until at least one match is present and return all matches."""
         resolved = self._resolve(locator)
         try:
