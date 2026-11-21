@@ -7,6 +7,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
+from core.gestures import scroll_down
 
 from config.settings import Settings, get_settings
 from core.locator import Locator, LocatorTuple
@@ -67,6 +68,20 @@ class BasePage:
             return False
         return True
 
+
+    def scroll_to(self, locator: Locator, max_swipes: int = 8) -> None:
+        """Scroll down until the element is visible, or fail with a clear message."""
+        for _ in range(max_swipes):
+            if self.is_displayed(locator, timeout=1):
+                return
+            scroll_down(self.driver)
+        if not self.is_displayed(locator, timeout=1):
+            resolved = self._resolve(locator)
+            raise TimeoutException(
+                f"Not found after {max_swipes} swipes: {self._label(locator, resolved)}"
+            )
+
+        
     # --- Actions ---------------------------------------------------------
     def click(self, locator: Locator, timeout: float | None = None) -> None:
         resolved = self._resolve(locator)
