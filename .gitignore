@@ -24,3 +24,6 @@ apps/*.zip
 .idea/
 .DS_Store
 allure-report/
+
+# local helper scripts
+ui_dump.py
