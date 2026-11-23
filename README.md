@@ -230,7 +230,7 @@ adb shell pm list packages | findstr saucelabs
 ## Quick start
 
 ```powershell
-git clone https://github.com/YOUR_GITHUB_USERNAME/appium-mobile-framework.git
+git clone https://github.com/Rachdi-imen/appium-mobile-framework.git
 cd appium-mobile-framework
 
 py -3.12 -m venv .venv
