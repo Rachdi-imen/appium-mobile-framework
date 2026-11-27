@@ -1,5 +1,6 @@
 """W3C Actions gestures (no TouchAction): cross-platform scroll and swipe."""
 
+from collections.abc import Sequence
 from typing import Literal
 
 from appium import webdriver
@@ -58,3 +59,20 @@ def swipe_element(
         swipe(driver, right, y, left, y)
     else:
         swipe(driver, left, y, right, y)
+
+
+def draw_polygon(
+    driver: webdriver.Remote,
+    points: Sequence[tuple[int, int]],
+    duration_ms: int = 300,
+) -> None:
+    """Draw a shape by dragging one finger through the points, in order."""
+    finger = PointerInput(interaction.POINTER_TOUCH, "finger")
+    actions = ActionBuilder(driver, mouse=finger, duration=duration_ms)
+    start_x, start_y = points[0]
+    actions.pointer_action.move_to_location(start_x, start_y)
+    actions.pointer_action.pointer_down()
+    for x, y in points[1:]:
+        actions.pointer_action.move_to_location(x, y)
+    actions.pointer_action.release()
+    actions.perform()
