@@ -14,6 +14,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+          # keep the pip downloads between runs, it makes the job faster
           cache: pip
 
       - name: Install dependencies
@@ -24,6 +25,9 @@ jobs:
 
       - name: Ruff format check
         run: ruff format --check core config pages tests
+
+      - name: Unit tests
+        run: pytest tests/test_locator.py -v
 
   tests:
     # we only start the emulator if the lint passed
@@ -73,7 +77,7 @@ jobs:
           script: |
             nohup appium > appium.log 2>&1 &
             curl --retry 15 --retry-connrefused --retry-delay 2 http://127.0.0.1:4723/status
-            pytest tests/test_smoke.py -v
+            pytest tests/test_smoke.py tests/test_gestures_w3c.py tests/test_checkout_e2e.py -v
 
       - name: Upload test results
         if: always()
