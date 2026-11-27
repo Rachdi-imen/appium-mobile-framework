@@ -4,7 +4,7 @@ import logging
 
 from appium import webdriver
 from appium.webdriver.common.appiumby import AppiumBy
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
@@ -114,6 +114,19 @@ class BasePage:
 
     def text_of(self, locator: Locator) -> str:
         return self.find(locator).text
+
+    def fill(self, locator: Locator, text: str) -> None:
+        """Scroll to the field if needed, then type the text."""
+        self.scroll_to(locator)
+        self.type_text(locator, text)
+        self.hide_keyboard()
+
+    def hide_keyboard(self) -> None:
+        # the keyboard can cover the buttons at the bottom of the screen
+        try:
+            self.driver.hide_keyboard()
+        except WebDriverException:
+            pass  # no keyboard on screen
 
     # --- Header (visible on every screen) --------------------------------
     def open_cart(self) -> None:

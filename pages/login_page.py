@@ -1,7 +1,6 @@
 """Login screen."""
 
 from appium.webdriver.common.appiumby import AppiumBy
-from selenium.common.exceptions import WebDriverException
 
 from core.locator import Locator
 from pages.base_page import BasePage
@@ -68,20 +67,15 @@ class LoginPage(BasePage):
 
     def select_saved_user(self, name: str) -> None:
         """Tap a user in the list, the app fills both fields."""
+        # on a small screen the list is below the fold
+        self.scroll_to(saved_user(name))
         self.click(saved_user(name))
 
     def submit(self) -> None:
-        self._hide_keyboard()
+        self.hide_keyboard()
         self.click(LOGIN_BUTTON)
 
     def error_message(self, field: str) -> str:
         """Error text shown under the 'username' or the 'password' field."""
         locator = USERNAME_ERROR if field == "username" else PASSWORD_ERROR
         return self.text_of(locator)
-
-    def _hide_keyboard(self) -> None:
-        # the keyboard can cover the login button
-        try:
-            self.driver.hide_keyboard()
-        except WebDriverException:
-            pass  # no keyboard on screen
