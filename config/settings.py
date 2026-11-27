@@ -31,6 +31,7 @@ class Settings(BaseSettings):
 
     # --- Android (local) -------------------------------------------------
     android_device_name: str = "Android Emulator"
+    android_udid: str | None = None
     android_platform_version: str | None = None
     android_app_path: Path = Path("apps/android-mydemoapp.apk")
     android_app_package: str = "com.saucelabs.mydemoapp.android"

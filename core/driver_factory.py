@@ -51,6 +51,8 @@ def _build_android_options(cfg: Settings) -> UiAutomator2Options:
         options.platform_version = cfg.android_platform_version
     if not cfg.is_cloud:
         options.app = str(cfg.local_app_path)
+    if cfg.android_udid:
+        options.udid = cfg.android_udid
     return options
 
 
